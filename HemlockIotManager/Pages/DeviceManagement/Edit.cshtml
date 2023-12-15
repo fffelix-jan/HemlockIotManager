@@ -1,0 +1,55 @@
+﻿@page
+@model HemlockIotManager.Pages.DeviceManagement.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Device</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Device.DeviceID" />
+            <div class="form-group">
+                <label asp-for="Device.OwnerID" class="control-label"></label>
+                <input asp-for="Device.OwnerID" class="form-control" />
+                <span asp-validation-for="Device.OwnerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Device.DeviceType" class="control-label"></label>
+                <input asp-for="Device.DeviceType" class="form-control" />
+                <span asp-validation-for="Device.DeviceType" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Device.IsActive" /> @Html.DisplayNameFor(model => model.Device.IsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Device.DeviceName" class="control-label"></label>
+                <input asp-for="Device.DeviceName" class="form-control" />
+                <span asp-validation-for="Device.DeviceName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Device.Description" class="control-label"></label>
+                <input asp-for="Device.Description" class="form-control" />
+                <span asp-validation-for="Device.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

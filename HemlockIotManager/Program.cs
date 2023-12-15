@@ -23,6 +23,7 @@ namespace HemlockIotManager
             builder.Services.AddRazorPages();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

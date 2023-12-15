@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using HemlockIotManager.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HemlockIotManager.Data
@@ -9,5 +10,9 @@ namespace HemlockIotManager.Data
             : base(options)
         {
         }
+
+        public virtual DbSet<Device> Devices { get; set; }
+
+        public virtual DbSet<LogEntry> LogEntries { get; set; }
     }
 }

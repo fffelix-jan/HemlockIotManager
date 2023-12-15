@@ -1,0 +1,60 @@
+﻿@page
+@model HemlockIotManager.Pages.DeviceManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Device[0].OwnerID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Device[0].DeviceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Device[0].IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Device[0].DeviceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Device[0].Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Device) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OwnerID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeviceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeviceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.DeviceID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.DeviceID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.DeviceID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
