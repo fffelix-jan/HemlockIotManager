@@ -1,0 +1,121 @@
+﻿@page
+@model HemlockIotManager.Pages.LogEntryModel
+
+<!-- Add Leaflet.js CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<h2>Log Entries</h2>
+
+<!-- Location Query Panel -->
+<div class="card mt-4">
+    <div class="card-header">
+        Location Query
+    </div>
+    <div class="card-body">
+        <!-- Location Query Form -->
+        <form method="get" action="/DeviceManagement/LogQuery">
+            <input type="hidden" name="deviceId" value="@Model.DeviceId" />
+            <div class="form-group">
+                <label for="startTime">Start Time:</label>
+                <input type="datetime-local" class="form-control" id="startTime" name="startTime"
+                       value="@Model.StartTime?.ToString("yyyy-MM-ddTHH:mm")" required />
+            </div>
+            <div class="form-group">
+                <label for="endTime">End Time:</label>
+                <div class="input-group">
+                    <input type="datetime-local" class="form-control" id="endTime" name="endTime"
+                           value="@Model.EndTime?.ToString("yyyy-MM-ddTHH:mm")" required />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-secondary" id="setNow">Now</button>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Query</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Left Panel: Log Entries Table -->
+    <div class="col-md-6">
+        @if (Model.LogEntries != null && Model.LogEntries.Any())
+        {
+            <div class="table-responsive bg-light text-dark" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>LogID</th>
+                            <th>DeviceID</th>
+                            <th>DateTime</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Altitude</th>
+                            <th>Battery Level</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var logEntry in Model.LogEntries.OrderBy(le => le.LogDateTime))
+                        {
+                            <tr>
+                                <td>@logEntry.LogID</td>
+                                <td>@logEntry.DeviceID</td>
+                                <td>@logEntry.LogDateTime</td>
+                                <td>@logEntry.Latitude</td>
+                                <td>@logEntry.Longitude</td>
+                                <td>@logEntry.Altitude</td>
+                                <td>@logEntry.BatteryLevel</td>
+                                <td>@logEntry.LogMessage</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No log entries found for the specified criteria.</p>
+        }
+    </div>
+
+    <!-- Right Panel: Leaflet Map -->
+    <div class="col-md-6">
+        <div id="map" style="height: 400px;"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Add Leaflet.js JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([30.2741, 120.1551], 13);
+
+        // Set up the tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Add markers and lines
+        var latlngs = [];
+        @foreach (var logEntry in Model.LogEntries.OrderBy(le => le.LogDateTime))
+        {
+            <text>
+                        var marker = L.marker([@logEntry.Latitude, @logEntry.Longitude]).addTo(map);
+            marker.bindPopup("Device ID: @logEntry.DeviceID, DateTime: @logEntry.LogDateTime");
+            latlngs.push([@logEntry.Latitude, @logEntry.Longitude]);
+            </text>
+        }
+
+                // Add a polyline to connect the markers
+                var polyline = L.polyline(latlngs, { color: 'red' }).addTo(map);
+        map.fitBounds(polyline.getBounds());
+    </script>
+}
+
+<p>
+    <button type="button" class="btn btn-primary" onclick="window.history.back();">Back</button>
+</p>

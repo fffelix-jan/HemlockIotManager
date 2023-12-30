@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HemlockIotManager.Data;
 using HemlockIotManager.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace HemlockIotManager.Pages.DeviceManagement
 {
+    [Authorize]
     public class CreateModel : PageModel
     {
         private readonly HemlockIotManager.Data.ApplicationDbContext _context;
@@ -34,6 +37,8 @@ namespace HemlockIotManager.Pages.DeviceManagement
             {
                 return Page();
             }
+
+            Device.OwnerID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
             _context.Devices.Add(Device);
             await _context.SaveChangesAsync();

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using HemlockIotManager.Data;
 using HemlockIotManager.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HemlockIotManager.Pages.DeviceManagement
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly HemlockIotManager.Data.ApplicationDbContext _context;

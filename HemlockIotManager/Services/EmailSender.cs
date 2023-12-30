@@ -24,19 +24,19 @@ namespace HemlockIotManager.Services
 
             if (string.IsNullOrEmpty(senderAddress))
             {
-                throw new ArgumentNullException("Sender address is null. Please set the environment variable EMAILADDRESS.");
+                throw new ArgumentNullException("Sender address is null. Please set the environment variable 'EMAILADDRESS'.");
             }
             else if (string.IsNullOrEmpty(senderPassword))
             {
-                throw new ArgumentNullException("Sender password is null. Please set the environment variable EMAILPASSWORD.");
+                throw new ArgumentNullException("Sender password is null. Please set the environment variable 'EMAILPASSWORD'.");
             }
             else if (string.IsNullOrEmpty(smtpPort))
             {
-                throw new ArgumentNullException("SMTP port is null. Please set the environment variable SMTPPORT.");
+                throw new ArgumentNullException("SMTP port is null. Please set the environment variable 'SMTPPORT'.");
             }
             else if (string.IsNullOrEmpty(smtpHost))
             {
-                throw new ArgumentNullException("SMTP host is null. Please set the environment variable SMTPHOST.");
+                throw new ArgumentNullException("SMTP host is null. Please set the environment variable 'SMTPHOST'.");
             }
 
             SmtpClient client = new SmtpClient

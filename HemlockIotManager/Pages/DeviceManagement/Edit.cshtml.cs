@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HemlockIotManager.Data;
 using HemlockIotManager.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace HemlockIotManager.Pages.DeviceManagement
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly HemlockIotManager.Data.ApplicationDbContext _context;
@@ -47,6 +50,8 @@ namespace HemlockIotManager.Pages.DeviceManagement
             {
                 return Page();
             }
+
+            Device.OwnerID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
             _context.Attach(Device).State = EntityState.Modified;
 

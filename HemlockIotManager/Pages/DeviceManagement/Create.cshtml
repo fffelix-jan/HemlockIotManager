@@ -1,8 +1,11 @@
 ﻿@page
+@using System.Security.Claims
 @model HemlockIotManager.Pages.DeviceManagement.CreateModel
 
 @{
     ViewData["Title"] = "Create";
+
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 }
 
 <h1>Create</h1>
@@ -15,7 +18,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Device.OwnerID" class="control-label"></label>
-                <input asp-for="Device.OwnerID" class="form-control" />
+                <input asp-for="Device.OwnerID" class="form-control" readonly value="@userId"/>
                 <span asp-validation-for="Device.OwnerID" class="text-danger"></span>
             </div>
             <div class="form-group">

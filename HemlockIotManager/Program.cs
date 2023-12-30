@@ -3,6 +3,9 @@ using HemlockIotManager.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using MQTTnet.AspNetCore.Extensions;
+using MQTTnet.Server;
+using System.Net;
 
 namespace HemlockIotManager
 {
@@ -13,7 +16,7 @@ namespace HemlockIotManager
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = Environment.GetEnvironmentVariable("SQLSERVERCONNECTIONSTRING") ?? throw new InvalidOperationException("Connection string not found. Please set the environment variable 'SQLSERVERCONNECTIONSTRING'.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -23,6 +26,8 @@ namespace HemlockIotManager
             builder.Services.AddRazorPages();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+            // Add test MQTT listener service
+            builder.Services.AddHostedService<MqttListenerService>();
 
             var app = builder.Build();
 
@@ -34,7 +39,6 @@ namespace HemlockIotManager
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -46,6 +50,10 @@ namespace HemlockIotManager
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            // Start the MQTT broker
+            var mqttServer = app.Services.GetService<IMqttServer>();
+
 
             app.Run();
         }

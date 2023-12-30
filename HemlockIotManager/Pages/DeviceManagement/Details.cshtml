@@ -47,3 +47,45 @@
     <a asp-page="./Edit" asp-route-id="@Model.Device.DeviceID">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>
+
+<!-- Location Query Panel -->
+<div class="card mt-4">
+    <div class="card-header">
+        Location Query
+    </div>
+    <div class="card-body">
+        <form method="get" action="/DeviceManagement/LogQuery">
+            <input type="hidden" name="deviceId" value="@Model.Device.DeviceID" />
+            <div class="form-group">
+                <label for="startTime">Start Time:</label>
+                <input type="datetime-local" class="form-control" id="startTime" name="startTime" required />
+            </div>
+            <div class="form-group">
+                <label for="endTime">End Time:</label>
+                <div class="input-group">
+                    <input type="datetime-local" class="form-control" id="endTime" name="endTime" required />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-secondary" id="setNow">Now</button>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Query</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('setNow').addEventListener('click', function () {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = ('0' + (now.getMonth() + 1)).slice(-2); // Months are 0-based
+        var day = ('0' + now.getDate()).slice(-2);
+        var hours = ('0' + now.getHours()).slice(-2);
+        var minutes = ('0' + now.getMinutes()).slice(-2);
+
+        // Format the string as YYYY-MM-DDTHH:MM
+        var dateTimeStr = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+        document.getElementById('endTime').value = dateTimeStr;
+    });
+</script>
