@@ -13,7 +13,7 @@ namespace HemlockIotManager.Pages
         public DateTime GenerateRandomDateTime()
         {
             Random rnd = new Random();
-            DateTime start = new DateTime(1999, 1, 1);
+            DateTime start = new DateTime(2022, 1, 1);
             int range = (DateTime.Today - start).Days;
             return start.AddDays(rnd.Next(range)).AddHours(rnd.Next(24)).AddMinutes(rnd.Next(60)).AddSeconds(rnd.Next(60));
         }

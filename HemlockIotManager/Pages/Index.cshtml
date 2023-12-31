@@ -1,11 +1,109 @@
 ﻿@page
-@model IndexModel
+@model HemlockIotManager.Pages.IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Hemlock IoT Manager!</h1>
-    <h3><i>The most convenient platform to track all your IoT GPS devices.</i></h3>
-    <h1>TODO: add bar charts and other stuff like that to track usage</h1>
+<!-- Custom Styles -->
+<style>
+    .counter {
+        background-color: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .counter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+    .chart-container {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+        /* Ensure the canvas does not inherit any transform properties */
+        .chart-container canvas {
+            transform: none !important;
+            transition: none !important;
+        }
+</style>
+
+
+
+<header class="bg-primary text-white text-center py-5 mb-4">
+    <h1 class="display-4 font-weight-bold">Hemlock IoT Manager</h1>
+    <p class="lead">The easiest way to manage all of your IoT GPS devices.</p>
+</header>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="counter">
+                <h1 class="text-danger"><b>Total Users</b></h1>
+                <h2>@Model.TotalUsers</h2>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="counter">
+                <h1 class="text-success"><b>Total Devices</b></h1>
+                <h2>@Model.TotalDevices</h2>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="counter">
+                <h1 class="text-info"><b>Total Logs</b></h1>
+                <h2>@Model.TotalLogs</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="text-center font-weight-bold">Device Usage Over Time</h2>
+        <canvas id="deviceUsageChart"></canvas>
+    </div>
+
+    <div class="text-center my-5">
+        <h2 class="font-weight-bold">What are you waiting for? Register now!</h2>
+        <a href="/Identity/Account/Register" class="btn btn-lg btn-warning mt-3">Register</a>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js" integrity="sha512-d6nObkPJgV791iTGuBoVC9Aa2iecqzJRE0Jiqvk85BhLHAPhWqkuBiQb1xz2jvuHNqHLYoN3ymPfpiB1o+Zgpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var ctx = document.getElementById('deviceUsageChart').getContext('2d');
+        var deviceUsageData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.DeviceUsageData));
+        
+        var dates = Object.keys(deviceUsageData);
+        var counts = Object.values(deviceUsageData);
+
+        var deviceUsageChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Device Usage',
+                    data: counts,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: true,
+            }
+        });
+    </script>
+}
+

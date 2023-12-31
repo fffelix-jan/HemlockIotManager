@@ -2,54 +2,45 @@
 @model HemlockIotManager.Pages.DeviceManagement.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Device Management";
 }
+    
+<!-- Page Header -->
+<div class="container py-4">
+    <h1 class="display-3 text-center mb-4">Manage Devices</h1>
 
-<h1>Manage Devices</h1>
+    <div class="text-right mb-3">
+        <a asp-page="Create" class="btn btn-success">Create New Device</a>
+    </div>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Device[0].DeviceName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Device[0].DeviceType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Device[0].IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Device[0].Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Device.OrderBy(d => d.DeviceName))
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeviceName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeviceType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.DeviceID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.DeviceID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.DeviceID">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Device Table -->
+    <div class="table-responsive bg-light">
+        <table class="table table-hover table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Device[0].DeviceName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Device[0].DeviceType)</th>
+                    <th>@Html.DisplayNameFor(model => model.Device[0].IsActive)</th>
+                    <th>@Html.DisplayNameFor(model => model.Device[0].Description)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Device.OrderBy(d => d.DeviceName))
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.DeviceName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DeviceType)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.DeviceID" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@item.DeviceID" class="btn btn-info btn-sm">Details</a>
+                            <a asp-page="./Delete" asp-route-id="@item.DeviceID" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

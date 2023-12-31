@@ -10,14 +10,17 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" style="background-color:#32cd32">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-success box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index" style="font-family:'Comic Sans MS'; color:white"><img src="https://www.felixan.ca/direct/hemlocklogo.gif" alt="Hemlock Logo" width="42" height="42"><b>  Hemlock IoT Manager</b></a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index" style="font-family:'Comic Sans MS'; color:white">
+                    <img src="https://www.felixan.ca/direct/hemlocklogo.gif" alt="Hemlock Logo" width="42" height="42">
+                    <b class="ml-2">Hemlock IoT Manager</b>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between navbar-light">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 font-weight-bold">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
@@ -37,7 +40,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted bg-light">
         <div class="container">
             &copy; 2023-2024 - FJA Productions - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>

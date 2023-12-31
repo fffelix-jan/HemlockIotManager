@@ -14,7 +14,8 @@
     <div class="card-body">
         <!-- Location Query Form -->
         <form method="get" action="/DeviceManagement/LogQuery">
-            <input type="hidden" name="deviceId" value="@Model.DeviceId" />
+            <label>Device ID:</label>
+            <input class="input-group-text" name="deviceId" readonly value="@Model.DeviceId" />
             <div class="form-group">
                 <label for="startTime">Start Time:</label>
                 <input type="datetime-local" class="form-control" id="startTime" name="startTime"
@@ -44,9 +45,7 @@
                 <table class="table table-bordered table-hover table-striped">
                     <thead class="thead-dark">
                         <tr>
-                            <th>LogID</th>
-                            <th>DeviceID</th>
-                            <th>DateTime</th>
+                            <th>Log Date/Time</th>
                             <th>Latitude</th>
                             <th>Longitude</th>
                             <th>Altitude</th>
@@ -55,11 +54,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var logEntry in Model.LogEntries.OrderBy(le => le.LogDateTime))
+                        @foreach (var logEntry in Model.LogEntries.OrderByDescending(le => le.LogDateTime))
                         {
                             <tr>
-                                <td>@logEntry.LogID</td>
-                                <td>@logEntry.DeviceID</td>
                                 <td>@logEntry.LogDateTime</td>
                                 <td>@logEntry.Latitude</td>
                                 <td>@logEntry.Longitude</td>
