@@ -1,13 +1,15 @@
 ﻿@page
 @model HemlockIotManager.Pages.TestDataGeneratorRemoveBeforeDeploymentModel
 @{
+    ViewData["Title"] = "Test Data Generator";
 }
 
 <h1>THIS PAGE MUST BE REMOVED BEFORE PRODUCTION DEPLOYMENT</h1>
 <h2>Generate Test Data</h2>
-<p>To clear and populate the database with test data, click the button below ONCE and WAIT until you are redirected to the home page.</p>
-<p><b>WARNING: Doing so will ERASE ALL LOCATION LOGS!</b></p>
+<p>To clear and populate the database with test data, click the "Generate Test Data" button. To clear data without generating new test data, click the "Clear Data Only" button.</p>
+<p><b>WARNING: Both actions will ERASE ALL LOCATION LOGS!</b></p>
 
 <form method="post">
-    <button type="submit" class="btn btn-primary">Generate Test Data</button>
+    <button type="submit" name="action" value="generate" class="btn btn-primary">Generate Test Data</button>
+    <button type="submit" name="action" value="clear" class="btn btn-warning">Clear Data Only</button>
 </form>
