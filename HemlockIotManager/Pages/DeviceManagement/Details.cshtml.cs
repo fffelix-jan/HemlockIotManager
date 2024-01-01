@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HemlockIotManager.Data;
 using HemlockIotManager.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity; // Include for IdentityUser
+using System.Security.Claims; // Include for Claims
 
 namespace HemlockIotManager.Pages.DeviceManagement
 {
@@ -35,10 +37,17 @@ namespace HemlockIotManager.Pages.DeviceManagement
             {
                 return NotFound();
             }
-            else
+
+            // Get the currently logged-in user's ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Check if the device's OwnerID matches the logged-in user's ID
+            if (device.OwnerID != userId)
             {
-                Device = device;
+                return Forbid(); // Return a 403 Forbidden response
             }
+
+            Device = device;
             return Page();
         }
     }

@@ -1,5 +1,6 @@
 using HemlockIotManager.Data;
 using HemlockIotManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using System;
 
 namespace HemlockIotManager.Pages
 {
+    [Authorize]
     public class TestDataGeneratorRemoveBeforeDeploymentModel : PageModel
     {
         private readonly ApplicationDbContext _context;

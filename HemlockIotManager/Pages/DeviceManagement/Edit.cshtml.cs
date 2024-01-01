@@ -16,9 +16,9 @@ namespace HemlockIotManager.Pages.DeviceManagement
     [Authorize]
     public class EditModel : PageModel
     {
-        private readonly HemlockIotManager.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EditModel(HemlockIotManager.Data.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -33,17 +33,22 @@ namespace HemlockIotManager.Pages.DeviceManagement
                 return NotFound();
             }
 
-            var device =  await _context.Devices.FirstOrDefaultAsync(m => m.DeviceID == id);
+            var device = await _context.Devices.FirstOrDefaultAsync(m => m.DeviceID == id);
             if (device == null)
             {
                 return NotFound();
             }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (device.OwnerID != userId)
+            {
+                return Forbid(); // Return a 403 Forbidden response
+            }
+
             Device = device;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -51,7 +56,17 @@ namespace HemlockIotManager.Pages.DeviceManagement
                 return Page();
             }
 
-            Device.OwnerID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var deviceInDb = await _context.Devices.AsNoTracking().FirstOrDefaultAsync(d => d.DeviceID == Device.DeviceID);
+            if (deviceInDb == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (deviceInDb.OwnerID != userId)
+            {
+                return Forbid(); // Return a 403 Forbidden response
+            }
 
             _context.Attach(Device).State = EntityState.Modified;
 

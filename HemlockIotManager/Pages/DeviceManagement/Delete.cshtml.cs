@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HemlockIotManager.Data;
 using HemlockIotManager.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims; // For user claims
 
 namespace HemlockIotManager.Pages.DeviceManagement
 {
@@ -32,15 +33,18 @@ namespace HemlockIotManager.Pages.DeviceManagement
             }
 
             var device = await _context.Devices.FirstOrDefaultAsync(m => m.DeviceID == id);
-
             if (device == null)
             {
                 return NotFound();
             }
-            else
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get logged-in user's ID
+            if (device.OwnerID != userId)
             {
-                Device = device;
+                return Forbid(); // Return 403 Forbidden if the user is not the owner
             }
+
+            Device = device;
             return Page();
         }
 
@@ -52,12 +56,19 @@ namespace HemlockIotManager.Pages.DeviceManagement
             }
 
             var device = await _context.Devices.FindAsync(id);
-            if (device != null)
+            if (device == null)
             {
-                Device = device;
-                _context.Devices.Remove(Device);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get logged-in user's ID
+            if (device.OwnerID != userId)
+            {
+                return Forbid(); // Return 403 Forbidden if the user is not the owner
+            }
+
+            _context.Devices.Remove(device);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
